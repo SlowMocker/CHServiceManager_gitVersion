@@ -1,0 +1,15 @@
+platform :ios, '7.0'
+
+target 'ServiceManager' do
+pod "AFNetworking", "~> 2.0"
+pod 'MBProgressHUD', '~> 0.9'
+pod 'Masonry', '~> 0.6.0'
+pod 'KGModal', '~> 1.1.0'
+pod 'MJRefresh', '~> 0.0.1'
+pod 'UIAlertView-Blocks', '~> 1.0'
+pod 'IQKeyboardManager'
+pod "MagicalRecord"
+pod "Qiniu", '~>7.0'
+end
+
+#install cmd: | pod install --verbose --no-repo-update |

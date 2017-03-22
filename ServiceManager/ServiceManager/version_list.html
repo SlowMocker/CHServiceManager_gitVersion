@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset='utf-8'>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0i"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+            <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+            <meta name="msapplication-tap-highlight" content="no" />
+            <title>快益点售后服务管家</title>
+    </head>
+    
+    <script>
+        var versionsArray = new Array();
+        
+        //    add latest version info here
+        //    eg: versionsArray["version_title"] = ["xxx", "xxx", "xxx"];
+        
+        versionsArray["V4.1.0 Build 96"] = ["工单执行支持微信回访；"
+                                            ,"工单执行微信回访，支持开关“已介绍清洗服务”（限空调）和“已演示电视网络功能”（限彩电）;"
+                                            ,"延保支持电子合同，支持电子延保创建、编辑、删除、微信支付;"
+                                            ,"支持历史工单查看星评;"
+                                            ,"扩大工单预约、执行、二次预约备注字数;"
+                                            ,"优化工单列表排序;"
+                                            ,"已预约、待执行、未完工列表展示预约或二次预约时间;"
+                                            ,"支持查看历史版本日志。"];
+
+        versionsArray["V4.0.2 Build 90"] = ["解决了因证书过期而不能进入应用程序的问题。"];
+
+        versionsArray["V4.0.1 Build 87"] = ["在【待执行】列表中添加了预约上门时间的显示。"];
+        
+        versionsArray["V4.0.0 Build 85"] = ["【新增】公告、调查、意见反馈；"
+                                            ,"【新增】查看备件审核未通过原因；"
+                                            ,"【新增】维修人员可以自定义通知声音；"
+                                            ,"【新增】查看7天内完工的历史工单以及所有处理日志，且日志可以复制"
+                                            ,"【更新】预约实时同步crm，且特殊完工无需等15分钟，可以从列表右滑直接操作"
+                                            ,"【更新 】首页布局变更、列表工单维修类型更加醒目、整体布局颜色调整；"
+                                            ,"【新增/更新 】各工单详情有新增延保入口，且单保时可以自动写入工单已有的用户产品等信息；"
+                                            ,"【新增】定制首页功能；"
+                                            ,"其他细节优化。"];
+                                                                                
+                                                                                function addVersionInfo(versionInfoList, vertionTitle) {
+                                                                                    var divElement = document.createElement("div");
+                                                                                    
+                                                                                    var titleElement = document.createElement("h4");
+                                                                                    titleElement.style.color = "#505050";
+                                                                                    titleElement.innerHTML = vertionTitle;
+                                                                                    divElement.appendChild(titleElement);
+                                                                                    
+                                                                                    //version info list
+                                                                                    var olElement = document.createElement("ol");
+                                                                                    divElement.appendChild(olElement);
+                                                                                    for (var infoRow in versionInfoList){
+                                                                                        var  liElement = document.createElement("li");
+                                                                                        liElement.style.color = "#505050";
+                                                                                        liElement.innerText = versionInfoList[infoRow];
+                                                                                        olElement.appendChild(liElement);
+                                                                                    }
+                                                                                    
+                                                                                    return divElement;
+                                                                                }
+    window.onload = function () {
+        var mainBoard = document.getElementById("mainBoard");
+        for (var versionTitle in versionsArray){
+            var versionInfos = versionsArray[versionTitle];
+            var versionItem = addVersionInfo(versionInfos, versionTitle);
+            mainBoard.appendChild(versionItem);
+        }
+    }
+    </script>
+    
+    <body>
+        <div id="mainBoard">
+        </div>
+        <br/> <br/><br/><br/>
+    </body>
+</html>

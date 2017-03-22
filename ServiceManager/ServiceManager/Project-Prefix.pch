@@ -1,0 +1,35 @@
+//
+//  BaseProject-Prefix.pch
+//  BaseProject
+//
+//  Created by wangzhi on 15-1-12.
+//  Copyright (c) 2015年 wangzhi. All rights reserved.
+//
+
+#ifndef BaseProject_BaseProject_Prefix_pch
+#define BaseProject_BaseProject_Prefix_pch
+
+//全局配置文件
+#include "Configure.h"
+
+//常用高效宏定义
+#include "MacroDefine.h"
+
+//常用的头文件
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import "EnumType.h"
+#import "ConstString.h"
+#import "CommonEntity.h"
+#import "UserDefaults.h"
+#import "UserInfoEntity.h"
+#import "Util.h"
+#import "InterfaceInputParamsObjects.h"
+#import "DataModelEntities.h"
+#import "Categroy.h"
+#import "MiscHelper.h"
+#import "CallingHelper.h"
+#import "ConfigInfoManager.h"
+#import "TableViewDataSourceModel.h"
+
+#endif
