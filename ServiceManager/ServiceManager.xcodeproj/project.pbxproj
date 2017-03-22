@@ -352,6 +352,7 @@
 		2F0DE0F71ACD1DC70014C140 /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2F0DE0F41ACD1DC70014C140 /* mapapi.bundle */; };
 		2F0DE0F81ACD1DC70014C140 /* readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2F0DE0F51ACD1DC70014C140 /* readme.txt */; };
 		2F0DE0FA1ACD1E380014C140 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F0DE0F91ACD1E380014C140 /* OpenGLES.framework */; };
+		6037A7051E827C6A0052804F /* UIViewController+ChEx.m in Sources */ = {isa = PBXBuildFile; fileRef = 6037A7041E827C6A0052804F /* UIViewController+ChEx.m */; };
 		BC0664D71B565C58003F87F4 /* WZModal.m in Sources */ = {isa = PBXBuildFile; fileRef = BC0664D61B565C58003F87F4 /* WZModal.m */; };
 		BC09203A1A8862C5004F76D7 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC0920391A8862C5004F76D7 /* LoginViewController.m */; };
 		BC138BF21B1FEB8000B7BB28 /* backgroundStar.png in Resources */ = {isa = PBXBuildFile; fileRef = BC138BEC1B1FEB8000B7BB28 /* backgroundStar.png */; };
@@ -1112,6 +1113,8 @@
 		2F0DE13E1ACD52BC0014C140 /* BMKVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKVersion.h; sourceTree = "<group>"; };
 		38056751BABFA5DB8CC975AD /* libPods-ServiceManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ServiceManager.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		44814F0A62602211B7F29F67 /* Pods-ServiceManager.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ServiceManager.release.xcconfig"; path = "Pods/Target Support Files/Pods-ServiceManager/Pods-ServiceManager.release.xcconfig"; sourceTree = "<group>"; };
+		6037A7031E827C6A0052804F /* UIViewController+ChEx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+ChEx.h"; sourceTree = "<group>"; };
+		6037A7041E827C6A0052804F /* UIViewController+ChEx.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+ChEx.m"; sourceTree = "<group>"; };
 		9E01C2D9B97B0096AD9043EA /* Pods-ServiceManager.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ServiceManager.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ServiceManager/Pods-ServiceManager.debug.xcconfig"; sourceTree = "<group>"; };
 		BC0664D51B565C58003F87F4 /* WZModal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WZModal.h; sourceTree = "<group>"; };
 		BC0664D61B565C58003F87F4 /* WZModal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WZModal.m; sourceTree = "<group>"; };
@@ -1771,6 +1774,15 @@
 			path = inc;
 			sourceTree = "<group>";
 		};
+		6037A7021E827C6A0052804F /* iMock_Hook */ = {
+			isa = PBXGroup;
+			children = (
+				6037A7031E827C6A0052804F /* UIViewController+ChEx.h */,
+				6037A7041E827C6A0052804F /* UIViewController+ChEx.m */,
+			);
+			path = iMock_Hook;
+			sourceTree = "<group>";
+		};
 		8264CA4130CB31C694AA587F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1846,6 +1858,7 @@
 		BC25A0FB1A63784700194EA8 /* ServiceManager */ = {
 			isa = PBXGroup;
 			children = (
+				6037A7021E827C6A0052804F /* iMock_Hook */,
 				0D313C521DD5760300C779C1 /* 售后管家.entitlements */,
 				0D957C531E5C3FFE00ABAC6C /* ReadMe.rtf */,
 				BC25A1001A63784700194EA8 /* AppDelegate.h */,
@@ -3068,6 +3081,7 @@
 				0D8DC5A61CEEB99C000E9CA0 /* LetvProductModelSearchViewController.m in Sources */,
 				0D130DD71CE95FD10035E8EA /* LetvOrderListViewController.m in Sources */,
 				0DEB21551D263F3A0095C848 /* SearchTelSupportOrdersDelegateIMP.m in Sources */,
+				6037A7051E827C6A0052804F /* UIViewController+ChEx.m in Sources */,
 				BCF043CF1B4E516C00183F7A /* WZImageViewer.m in Sources */,
 				0DCE040F1BABDC9E008DE055 /* model.xcdatamodeld in Sources */,
 				BC57D7BF1A728D8F00FE3904 /* NetClientManager.m in Sources */,
