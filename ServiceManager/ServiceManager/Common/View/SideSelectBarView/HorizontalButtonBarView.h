@@ -13,9 +13,21 @@
 //protocal
 @protocol HorizontalButtonBarViewDelegate <NSObject>
 @optional
+/**
+ *  bar 上的按钮数
+ */
 - (NSInteger)numberOfHorizontalButtons:(HorizontalButtonBarView*)buttonBarView;
+/**
+ *  bar 上对应位置（btnIndex）按钮的title
+ */
 - (NSString*)horizontalButtonBarView:(HorizontalButtonBarView*)barView buttonTitleForIndex:(NSInteger)btnIndex;
+/**
+ *  bar 上对应位置（btnIndex）上的按钮
+ */
 - (UIButton*)horizontalButtonBarView:(HorizontalButtonBarView*)barView buttonForIndex:(NSInteger)btnIndex;
+/**
+ *  bar 上对应位置（btnIndex）按钮选中时的代理接口
+ */
 - (void)horizontalButtonBarView:(HorizontalButtonBarView*)barView didSelectedAtIndex:(NSInteger)btnIndex;
 @end
 

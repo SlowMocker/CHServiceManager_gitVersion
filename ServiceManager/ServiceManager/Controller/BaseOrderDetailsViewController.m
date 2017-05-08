@@ -29,9 +29,9 @@ static NSInteger sHeaderLabelViewTag = 0x2024387;
     return _headerViewCache;
 }
 
-- (TableViewDataSourceModel*)detalsDataModel{
+- (TableViewDataHandle*)detalsDataModel{
     if (nil == _detalsDataModel) {
-        _detalsDataModel = [[TableViewDataSourceModel alloc]init];
+        _detalsDataModel = [[TableViewDataHandle alloc]init];
     }
     return _detalsDataModel;
 }
@@ -73,8 +73,7 @@ static NSInteger sHeaderLabelViewTag = 0x2024387;
     [self.tableView refreshTableViewData];
 }
 
-- (UIButton*)urgeButton
-{
+- (UIButton*)urgeButton {
     if (nil == _urgeButton) {
         _urgeButton = [UIButton redButton:nil];
         [_urgeButton addTarget:self action:@selector(urgeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];

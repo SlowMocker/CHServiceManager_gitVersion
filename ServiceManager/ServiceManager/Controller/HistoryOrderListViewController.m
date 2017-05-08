@@ -14,6 +14,8 @@
 #import "SearchOrderViewController.h"
 #import "LetvFacilitatorOrderListViewDelegateIMP.h"
 #import "LetvRepairOrderListViewDelegateIMP.h"
+#import "SmartMiFacilitatorOrderListViewDelegateIMP.h"
+#import "SmartMiRepairOrderListViewDelegateIMP.h"
 
 @interface HistoryOrderListViewController ()
 @property(nonatomic, strong)OrderListViewDelegateIMP *tableViewDelegate;
@@ -136,15 +138,28 @@
 
     switch (serviceBrandGroup) {
         case kServiceBrandGroupPrimary:
+        {
             break;
+        }
         case kServiceBrandGroupLetv:
+        {
             title = [title appendStr:@"(乐视)"];
             break;
+        }
         case kServiceBrandGroupMeLing:
+        {
             title = [title appendStr:@"(美菱)"];
             break;
-        default:
+        }
+        case kServiceBrandGroupSmartMi:
+        {
+            title = [title appendStr:@"(智米)"];
             break;
+        }
+        default:
+        {
+            break;
+        }
     }
     return title;
 }
@@ -173,6 +188,9 @@
             break;
         case kServiceBrandGroupMeLing:
             delegateIMP = [self getContentTableViewDelegateForMeLing];
+            break;
+        case kServiceBrandGroupSmartMi:
+            delegateIMP = [self getContentTableViewDelegateForSmartMi];
             break;
         default:
             break;
@@ -206,7 +224,32 @@
     return delegateIMP;
 }
 
-- (OrderListViewDelegateIMP*)getContentTableViewDelegateForLetv
+- (OrderListViewDelegateIMP*)getContentTableViewDelegateForSmartMi {
+    OrderListViewDelegateIMP *delegateIMP;
+    
+    switch (self.user.userRoleType) {
+        case kUserRoleTypeFacilitator:
+            delegateIMP = [SmartMiFacilitatorOrderListViewDelegateIMP new];
+            delegateIMP.orderStatus = kFacilitatorOrderStatusFinished;
+            break;
+        case kUserRoleTypeRepairer:
+            delegateIMP = [SmartMiRepairOrderListViewDelegateIMP new];
+            delegateIMP.orderStatus = kRepairerOrderStatusFinished;
+            break;
+        default:
+            break;
+    }
+
+    return delegateIMP;
+}
+
+- (OrderListViewDelegateIMP*)getContentTableViewDelegateForMeLing
+{
+    //add delegate here for men ning
+    return nil;
+}
+
+- (OrderListViewDelegateIMP *) getContentTableViewDelegateForLetv
 {
     OrderListViewDelegateIMP *delegateIMP;
     
@@ -222,14 +265,9 @@
         default:
             break;
     }
-
+    
     return delegateIMP;
 }
 
-- (OrderListViewDelegateIMP*)getContentTableViewDelegateForMeLing
-{
-    //add delegate here for men ning
-    return nil;
-}
 
 @end

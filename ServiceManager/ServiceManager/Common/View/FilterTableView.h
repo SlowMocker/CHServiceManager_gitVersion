@@ -12,7 +12,7 @@
 
 @class FilterTableView;
 
-@interface FilterTableViewDataModel : TableViewDataSourceModel
+@interface FilterTableViewDataModel : TableViewDataHandle
 -(void)setHeaderData:(TableViewSectionHeaderData*)data forSection:(NSInteger)section;
 
 //btnItemModels : CheckItemModel

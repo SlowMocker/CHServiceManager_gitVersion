@@ -16,6 +16,8 @@
 #import "SearchRepairOrdersDelegateIMP.h"
 #import "SearchLetvFacilitatorOrdersDelegateIMP.h"
 #import "SearchLetvRepairOrdersDelegateIMP.h"
+#import "SmartMiSearchFacilitatorOrdersDelegateIMP.h"
+#import "SmartMiSearchRepairOrdersDelegateIMP.h"
 
 #pragma mark - 普通工单搜索
 
@@ -97,25 +99,42 @@
 
 - (void)updateOrderTableViewDelegateIMP:(OrderListViewDelegateIMP*)orderListImp
 {
-    if ([orderListImp isKindOfClass:[SearchLetvFacilitatorOrdersDelegateIMP class]]) {
-        SearchLetvFacilitatorOrdersDelegateIMP *imp =
-        (SearchLetvFacilitatorOrdersDelegateIMP*)orderListImp;
+    if ([orderListImp isKindOfClass:[SmartMiSearchFacilitatorOrdersDelegateIMP class]]) {
+        SmartMiSearchFacilitatorOrdersDelegateIMP *imp =
+        (SmartMiSearchFacilitatorOrdersDelegateIMP*)orderListImp;
         imp.error = self.error;
         imp.responseData = self.responseData;
         imp.allSearchedOrders = self.allSearchedOrders;
-    }else if([orderListImp isKindOfClass:[SearchLetvRepairOrdersDelegateIMP class]]) {
+    }
+    else if([orderListImp isKindOfClass:[SmartMiSearchRepairOrdersDelegateIMP class]]) {
         SearchLetvRepairOrdersDelegateIMP *imp =
         (SearchLetvRepairOrdersDelegateIMP*)orderListImp;
         imp.error = self.error;
         imp.responseData = self.responseData;
         imp.allSearchedOrders = self.allSearchedOrders;
-    }else if ([orderListImp isKindOfClass:[SearchFacilitatorOrdersDelegateIMP class]]) {
+    }
+    else if ([orderListImp isKindOfClass:[SearchLetvFacilitatorOrdersDelegateIMP class]]) {
+        SearchLetvFacilitatorOrdersDelegateIMP *imp =
+        (SearchLetvFacilitatorOrdersDelegateIMP*)orderListImp;
+        imp.error = self.error;
+        imp.responseData = self.responseData;
+        imp.allSearchedOrders = self.allSearchedOrders;
+    }
+    else if([orderListImp isKindOfClass:[SearchLetvRepairOrdersDelegateIMP class]]) {
+        SearchLetvRepairOrdersDelegateIMP *imp =
+        (SearchLetvRepairOrdersDelegateIMP*)orderListImp;
+        imp.error = self.error;
+        imp.responseData = self.responseData;
+        imp.allSearchedOrders = self.allSearchedOrders;
+    }
+    else if ([orderListImp isKindOfClass:[SearchFacilitatorOrdersDelegateIMP class]]) {
         SearchFacilitatorOrdersDelegateIMP *imp =
         (SearchFacilitatorOrdersDelegateIMP*)orderListImp;
         imp.error = self.error;
         imp.responseData = self.responseData;
         imp.allSearchedOrders = self.allSearchedOrders;
-    }else if([orderListImp isKindOfClass:[SearchRepairOrdersDelegateIMP class]]) {
+    }
+    else if([orderListImp isKindOfClass:[SearchRepairOrdersDelegateIMP class]]) {
         SearchRepairOrdersDelegateIMP *imp =
         (SearchRepairOrdersDelegateIMP*)orderListImp;
         imp.error = self.error;
@@ -203,29 +222,91 @@
 }
 @end
 
+#pragma mark - 智米工单搜索
+
+@interface SmartMiOrderSearchHandleDelegateIMP : OrderSearchHandleDelegateIMP
+@end
+
+
+@implementation SmartMiOrderSearchHandleDelegateIMP
+
+- (void) searchOrders:(NSString*)keyWord response:(RequestCallBackBlockV2)requestCallBackBlock {
+    SmartMiRepairerQueryList4RepairmanByObjectidInputParams *input = [SmartMiRepairerQueryList4RepairmanByObjectidInputParams new];
+    
+    input.repairmanId = [UserInfoEntity sharedInstance].userId;
+    input.objectId = keyWord;
+    input.isFinishedOrder = self.searchOrderGroupTypeStr;
+
+    
+    [[HttpClientManager sharedInstance] smartMi_repairer_queryList4RepairmanByObjectid:input response:^(NSError *error, HttpResponseData *responseData, id extData) {
+        [self handleSearchedOrders:error response:responseData orders:(NSArray *)extData];
+        requestCallBackBlock(error, responseData,extData);
+    }];
+}
+
+- (OrderListViewDelegateIMP *) getOrderTableViewDelegateIMP {
+    OrderListViewDelegateIMP *imp;
+    
+    switch ([UserInfoEntity sharedInstance].userRoleType) {
+        case kUserRoleTypeFacilitator:
+        {
+            imp = [SmartMiSearchFacilitatorOrdersDelegateIMP new];
+        }
+            break;
+        case kUserRoleTypeRepairer:
+        {
+            imp = [SmartMiSearchRepairOrdersDelegateIMP new];
+        }
+            break;
+        default:
+            break;
+    }
+    return imp;
+}
+
+// 搜索到的工单所归的列组（工单类型）
+- (NSArray *) groupsOrdersBelongTo {
+    NSMutableSet *groupsSet = [[NSMutableSet alloc]init];
+    for (SmartMiOrderContentModel *order in self.allSearchedOrders) {
+        NSArray *groups = order.orderStatusSet;
+        if (groups.count > 0) {
+            [groupsSet addObjectsFromArray:groups];
+        }
+    }
+    
+    return [[groupsSet allObjects]sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        return [obj1 integerValue] > [obj2 integerValue];
+    }];
+}
+
+
+@end
+
 #pragma mark - SearchOrderViewController
 
 @interface SearchOrderViewController()<UISearchBarDelegate,HorizontalButtonBarViewDelegate, ScrollPageViewDelegate>
 {
-    HorizontalButtonBarView *_topBtnsNavView;
+    HorizontalButtonBarView *_topBtnsNavView;/**< 搜索页面上面的分栏 （工单类型: 已派工、待预约 ...）*/
     ScrollPageView *_scrollPagesView;
     NSInteger _currentPageIndex;
 }
-@property(nonatomic, strong)NSArray *listColumIds;
+@property(nonatomic, strong)NSArray *listColumIds;/**< 工单类型分栏 title 集合 */
 
 @property(nonatomic, strong)UISearchBar *searchBar;
 @property (nonatomic, strong)UIView *contentView;
 
-@property (nonatomic, strong)OrderSearchHandleDelegateIMP *searchHandleDelegate;
+@property (nonatomic, strong)OrderSearchHandleDelegateIMP *searchHandleDelegate;/**< 数据代理 */
 
 @end
 
 @implementation SearchOrderViewController
 
+#pragma mark
+#pragma mark life cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    //top searchBar
+    // 搜索框
     _searchBar = [[UISearchBar alloc]init];
     _searchBar.delegate = self;
     _searchBar.placeholder = @"请输入工单号";
@@ -238,7 +319,7 @@
         make.height.equalTo(@(kButtonLargeHeight));
     }];
     
-    //content view
+    // content view
     _contentView = [[UIView alloc]init];
     [self.view addSubview:_contentView];
     [_contentView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -253,37 +334,47 @@
     self.searchHandleDelegate.searchOrderGroupType = self.searchOrderGroupType;
 }
 
-- (OrderSearchHandleDelegateIMP*)getOrderSearchHandleDelegateIMP:(kServiceBrandGroup)serviceBrandGroup
-{
+- (void) viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    NSMutableArray *viewControllers = [[NSMutableArray alloc]initWithArray:self.navigationController.viewControllers];
+    [viewControllers removeObject:self];
+    self.navigationController.viewControllers = viewControllers;
+}
+
+#pragma mark
+#pragma mark private methods
+// 获取数据请求对象
+- (OrderSearchHandleDelegateIMP *) getOrderSearchHandleDelegateIMP:(kServiceBrandGroup)serviceBrandGroup {
     OrderSearchHandleDelegateIMP *handleDelegate;
 
-    switch (serviceBrandGroup) {
+    switch (serviceBrandGroup) { // 长虹大类
         case kServiceBrandGroupPrimary:
+        {
             handleDelegate = [[OrderSearchHandleDelegateIMP alloc]init];
             break;
+        }
         case kServiceBrandGroupLetv:
+        {
             handleDelegate = [[LetvOrderSearchHandleDelegateIMP alloc]init];
             break;
+        }
         case kServiceBrandGroupMeLing:
             //add code here for meining
             break;
+        case kServiceBrandGroupSmartMi:
+        {
+            handleDelegate = [[SmartMiOrderSearchHandleDelegateIMP alloc]init];
+            break;
+        }
         default:
             break;
     }
     return handleDelegate;
 }
 
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-
-    NSMutableArray *viewControllers = [[NSMutableArray alloc]initWithArray:self.navigationController.viewControllers];
-    [viewControllers removeObject:self];
-    self.navigationController.viewControllers = viewControllers;
-}
-
-- (WZTableViewDelegateIMP*)getContentTableViewDelegate:(NSInteger)typeId
-{
+// 获取到 wzTableView 的数据请求对象（待审核）
+- (WZTableViewDelegateIMP *) getContentTableViewDelegate:(NSInteger)typeId {
     OrderListViewDelegateIMP *delegateIMP = [self.searchHandleDelegate getOrderTableViewDelegateIMP];
 
     if (nil != delegateIMP) {
@@ -295,8 +386,8 @@
     return delegateIMP;
 }
 
-- (NSMutableArray*)getContentPageViews
-{
+// 获取所有的 wzTableView
+- (NSMutableArray *) getContentPageViews {
     NSMutableArray *pageViews = [[NSMutableArray alloc]init];
     
     for (NSInteger pageIndex = 0; pageIndex < self.listColumIds.count; pageIndex++) {
@@ -314,8 +405,7 @@
     return pageViews;
 }
 
-- (void)createGroupedOrders
-{
+- (void) createGroupedOrders {
     _currentPageIndex = -1;
 
     //indicator view
@@ -336,9 +426,8 @@
     [_topBtnsNavView clickButtonAtIndex:0];
 }
 
-- (NSString*)getOrderTypeTitleByIndex:(NSInteger)index
-{
-    NSInteger columId = [self.listColumIds[index]integerValue];
+- (NSString *) getOrderTypeTitleByIndex:(NSInteger)index {
+    NSInteger columId = [self.listColumIds[index] integerValue];
     
     switch (self.user.userRoleType) {
         case kUserRoleTypeFacilitator:
@@ -354,38 +443,7 @@
     }
     return nil;
 }
-
-- (NSInteger)numberOfHorizontalButtons:(HorizontalButtonBarView*)buttonBarView
-{
-    return self.listColumIds.count;
-}
-
-- (NSString*)horizontalButtonBarView:(HorizontalButtonBarView*)barView buttonTitleForIndex:(NSInteger)btnIndex
-{
-    return [self getOrderTypeTitleByIndex:btnIndex];
-}
-
-- (void)horizontalButtonBarView:(HorizontalButtonBarView*)barView didSelectedAtIndex:(NSInteger)btnIndex
-{
-    if (_currentPageIndex != btnIndex) {
-        _currentPageIndex = btnIndex;
-        [_scrollPagesView moveScrollowViewAthIndex:_currentPageIndex];
-    }
-}
-
-- (void)didScrollPageViewChangedPage:(NSInteger)aPage
-{
-    _currentPageIndex = aPage;
-    [_topBtnsNavView changeButtonStateAtIndex:aPage];
-    
-    WZTableView *targetTableView = _scrollPagesView.contentItems[aPage];
-    if (!targetTableView.bHasLoaded) {
-        [targetTableView refreshTableViewData];
-    }
-}
-
-- (void)searchOrdersByKeyword:(NSString*)keyword
-{
+- (void) searchOrdersByKeyword:(NSString*)keyword {
     [Util showWaitingDialog];
     [self.searchHandleDelegate searchOrders:keyword response:^(NSError *error, HttpResponseData *responseData, id extData) {
         [Util dismissWaitingDialog];
@@ -403,10 +461,38 @@
     }];
 }
 
-#pragma mark - UISearchBarDelegate
+#pragma mark
+#pragma mark HorizontalButtonBarViewDelegate
+- (NSInteger) numberOfHorizontalButtons:(HorizontalButtonBarView*)buttonBarView {
+    return self.listColumIds.count;
+}
 
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
-{
+- (NSString *) horizontalButtonBarView:(HorizontalButtonBarView*)barView buttonTitleForIndex:(NSInteger)btnIndex {
+    return [self getOrderTypeTitleByIndex:btnIndex];
+}
+
+- (void) horizontalButtonBarView:(HorizontalButtonBarView*)barView didSelectedAtIndex:(NSInteger)btnIndex {
+    if (_currentPageIndex != btnIndex) {
+        _currentPageIndex = btnIndex;
+        [_scrollPagesView moveScrollowViewAthIndex:_currentPageIndex];
+    }
+}
+
+#pragma mark
+#pragma mark ScrollPageViewDelegate
+- (void) didScrollPageViewChangedPage:(NSInteger)aPage {
+    _currentPageIndex = aPage;
+    [_topBtnsNavView changeButtonStateAtIndex:aPage];
+    
+    WZTableView *targetTableView = _scrollPagesView.contentItems[aPage];
+    if (!targetTableView.bHasLoaded) {
+        [targetTableView refreshTableViewData];
+    }
+}
+
+#pragma mark
+#pragma mark UISearchBarDelegate
+- (void) searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     [searchBar resignFirstResponder];
 
     if ([Util isEmptyString:searchBar.text]) {
@@ -416,8 +502,7 @@
     }
 }
 
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
-{
+- (void) searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     [searchBar resignFirstResponder];
 
     [self popViewController];

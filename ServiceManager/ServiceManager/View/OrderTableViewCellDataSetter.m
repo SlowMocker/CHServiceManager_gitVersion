@@ -166,4 +166,48 @@
     return [NSString makeAttrString:attrArray];
 }
 
++(void)setSmartMiOrderContentModel:(SmartMiOrderContentModel*)order toCell:(OrderTableViewCell*)cell
+{
+    NSString *tempStr;
+    OrderItemContentView *mainView = cell.topOrderContentView;
+    
+    mainView.orderIdLabel.text = order.objectId;
+    
+    mainView.contentLabel.attributedText = [[self class]buildOrderAttrStr:order.orderType catgory:order.productTypeVal customer:order.name];
+    
+    BOOL bPrior = [order.priority isEqualToString:@"紧急"];
+    BOOL bUrgent = [order.urgeFlag isEqualToString:@"X"] && (order.urgeTimes > 0);
+    [mainView showPrior:bPrior showUrgent:bUrgent];
+    
+    
+   
+    
+    //完工后用户星评
+//    NSInteger commentScoreVal = 0;
+//    mainView.starView.score = commentScoreVal/5.0;
+//    mainView.starView.hidden = !(commentScoreVal > 0);
+    mainView.starView.hidden = YES;
+    
+    [mainView updateProductRepairTypeToViews:order.orderTypeVal];
+    
+    mainView.addressLabel.text = [Util defaultStr:@"客户地址未知" ifStrEmpty:order.customerFullAddress];
+    
+    mainView.executeNameLabel.hidden = [Util isEmptyString:order.workerName];
+    mainView.executeNameLabel.text = [order.workerName truncatingTailWhenLengthGreaterThan:6];
+    
+    tempStr = [MiscHelper getOrderProccessStatusStrById:order.status repairerHandle:order.isReceive];
+    mainView.statusLabel.attributedText = [[self class]jointStatusText:tempStr createTime:order.createTime];
+    
+    NSDate *date;
+    tempStr = nil;
+    if ([order.status isEqualToString:@"SR41"]) {
+        date = [Util dateWithString:order.firstApptDate format:WZDateStringFormat9]; //预约上门时间
+    }else if ([order.status isEqualToString:@"SR46"]){
+        date = [Util dateWithString:order.lastApptDate format:WZDateStringFormat9]; //二次预约上门时间
+    }
+    tempStr = [[self class]generateReadableDateText:date];
+    mainView.dateLabel.hidden = [Util isEmptyString:tempStr];
+    mainView.dateLabel.text = tempStr;
+}
+
 @end

@@ -295,4 +295,66 @@ static NSString *const LetvServerApiApplySupportHelp = @"/lsRepairman/applySuppo
 //搜索工单
 static NSString *const LetvServerApiSearchOrders = @"/lsRepairman/queryList4RepairmanByObjectid/";
 
+#pragma mark
+#pragma mark 智米品牌
+
+// 维修人员列表,用于派工
+static NSString *const SmartMiServerApiGetRepairerList = @"/zmServiceProvider/queryRepairmanList/";
+
+// 派工给服务工程师(维修工)
+static NSString *const SmartMiServerApiAssignEngineer = @"/zmServiceProvider/dispatching/";
+
+// 维修工上门签到
+static NSString *const SmartMiServerApiRepairSignIn = @"/zmRepairman/sign/";
+
+// 订单详情
+static NSString *const SmartMiServerApiGetOrderDetails = @"/zmRepairman/queryDispatchInfoDetail/";
+
+
+#pragma mark
+#pragma mark 服务商
+// 服务商订单列表
+static NSString *const SmartMiServerApiGetSvcProviderOrderList = @"/zmServiceProvider/queryDispatchInfoList/";
+
+//接受、拒绝订单
+static NSString *const SmartMiServerApiFacilitatorRefuseOrder = @"/zmServiceProvider/acceptOrRefuse/";
+
+//服务商预约
+static NSString *const SmartMiServerApiAppointmentOrder = @"/zmServiceProvider/appointment/";
+
+//服务商改约
+static NSString *const SmartMiServerApiChangeAppointmentOrder = @"/zmServiceProvider/changeAppointment/";
+
+#pragma mark
+#pragma mark 维修工
+//维修工订单列表
+static NSString *const SmartMiServerApiGetRepairOrderList = @"/zmRepairman/queryDispatchInfoList/";
+
+//接受、拒绝订单
+static NSString *const SmartMiServerApiRepairerRefuseOrder = @"/zmRepairman/acceptOrRefuse/";
+
+//维修工预约,改约
+static NSString *const SmartMiRepairerAppointmentOrder = @"/zmRepairman/appointment/";
+
+//维修工接受催单
+static NSString *const SmartMiAgreeOrderUrge = @"/zmRepairman/acceptUrge/";
+
+//维修工获取机型品牌
+static NSString *const SmartMiQueryAircraftBrand = @"/zmRepairman/queryAircraftBrand/";
+
+//维修工模糊查询
+static NSString *const SmartMiQueryFuzzyAircraft = @"/zmRepairman/queryFuzzyAircraft/";
+
+//维修工完工
+static NSString *const SmartMiFinishWork = @"/zmRepairman/finishWork/";
+
+//维修工取消工单
+static NSString *const SmartMiCancelWork = @"/zmRepairman/cancelWork/";
+
+//维修工查询工单
+static NSString *const SmartMiQueryList4RepairmanByObjectid = @"/zmRepairman/queryList4RepairmanByObjectid/";
+
+//保存照片地址
+static NSString *const SmartMiSaveImageUrl = @"/zmRepairman/saveImageUrl/";
+
 #endif

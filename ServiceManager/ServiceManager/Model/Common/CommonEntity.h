@@ -38,9 +38,9 @@
 @end
 
 @interface PageInfo : NSObject
-@property(assign, nonatomic) NSInteger pageSize; // per page size
+@property(assign, nonatomic) NSInteger pageSize; // per page size (每次请求数据条数)
 @property(assign, nonatomic) NSInteger currentPage; //page index
-@property(assign, nonatomic) NSInteger currentPageNum;  // 当前页条数
+@property(assign, nonatomic) NSInteger currentPageNum;  // 当前页条数（暂时没有使用）
 @end
 
 //按钮数据

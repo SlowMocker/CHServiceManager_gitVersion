@@ -293,6 +293,13 @@
     return [dateFormatter dateFromString:dateStr];
 }
 
++ (NSString *) ymdhmWithDate:(NSDate *)date {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    dateFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"];
+    dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm";
+    return [dateFormatter stringFromDate:date];
+}
+
 + (void)showTopAlertView:(NSString*)message
 {
     [AlertView showMessage:message isError:NO];

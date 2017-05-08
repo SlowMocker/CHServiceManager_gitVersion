@@ -16,7 +16,7 @@
         self.image = defaultImage;
         return;
     }
-
+    
     //add waiting indicator
     __block UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [self addSubview:indicator];

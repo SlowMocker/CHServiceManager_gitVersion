@@ -57,6 +57,8 @@
 #define ContinueIf(x)   if(x)continue
 #define ReturnIf(x) if(x)return
 
+#define ReturnNOIf(x,y) if(x){[Util showToast:y]; return NO;}
+
 //Font
 #define SystemFont(size) [UIFont systemFontOfSize:size]
 #define SystemBoldFont(size) [UIFont boldSystemFontOfSize:size]

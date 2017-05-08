@@ -96,6 +96,9 @@
 //return : nsdate
 + (NSDate*)dateWithString:(NSString*)dateStr format:(NSString*)dateStrFormat;
 
+// 2017-11-22 10:20
++ (NSString *) ymdhmWithDate:(NSDate *)date;
+
 //input: ConfigItemInfo array
 //return CheckItemModel array
 + (NSMutableArray *)convertConfigItemInfoArrayToCheckItemModelArray:(NSArray*)cfgArray;

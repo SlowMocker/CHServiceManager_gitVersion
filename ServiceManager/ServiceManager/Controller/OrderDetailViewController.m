@@ -164,14 +164,14 @@ typedef NS_ENUM(NSInteger, kOrderDetailsHeaderViewType)
     return headerView;
 }
 
-- (TableViewDataSourceModel*)makeDetailsDataToModel:(OrderContentDetails*)orderDetail
+- (TableViewDataHandle*)makeDetailsDataToModel:(OrderContentDetails*)orderDetail
 {
     NSInteger section, row;
     TableViewSectionHeaderData *headerData;
     TableViewCellData *cellData;
     NSString *tempStr;
     
-    TableViewDataSourceModel *sourceModel = [[TableViewDataSourceModel alloc]init];
+    TableViewDataHandle *sourceModel = [[TableViewDataHandle alloc]init];
     
     //工单信息
     section = 0, row = 0;

@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+// 名次解释:
+// 品牌: 如 长虹、CHiQ、智米
+// 产品大类: 如 空调、冰箱
+// 品类: 如 空调柜机、空调挂机
+
 //主数据表Type
 typedef const NSString *MainConfigInfoTableType;
 
@@ -73,7 +78,23 @@ static MainConfigInfoTableType MainConfigInfoTableType109 = @"109";//服务请�
 @property(nonatomic, strong)NSArray *appointmentFailureReasons;
 
 @property(nonatomic, strong)NSArray *brands;//品牌eg: 长虹
+
+/**
+ *  根据品牌 id 获取到该品牌拥有的所有产品大类 如: 长虹品牌下有冰箱、空调这些大类
+ *
+ *  @param brandId 品牌 id
+ *
+ *  @return 大类集合
+ */
 -(NSArray *)productsOfBrand:(NSString*)brandId; //产品大类, eg: 彩电
+
+/**
+ *  根据产品大类获取该大类下所有的子类（品类）如: 根据空调获取到所有的空调品类(空调柜机等)
+ *
+ *  @param productId 产品大类
+ *
+ *  @return 品类集合
+ */
 -(NSArray *)subProductsOfProduct:(NSString*)productId; //产品子类（品类）eg:等离子彩电
 - (NSArray*)subProductsOfTV;//彩电下的品类
 -(NSArray *)mutiExtendServiceProductTypes; //家多保支持的产品类型

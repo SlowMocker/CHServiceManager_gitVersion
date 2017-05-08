@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "HttpClientManager.h"
 #import "HttpClientManager+Letv.h"
+#import "HttpClientManager+SmartMi.h"
 #import "UserInfoEntity.h"
 //#import "AppDelegate.h"
 #import "ConfigInfoManager.h"

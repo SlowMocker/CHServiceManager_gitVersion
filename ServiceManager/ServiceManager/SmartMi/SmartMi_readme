@@ -1,0 +1,17 @@
+Model:
+SmartMi 数据模型
+
+Vcs:
+所有的 vc
+
+Vcs -> Top:
+一级 vc，比如工单列表
+
+Vcs -> Secondary:
+二级 vc
+
+Vcs -> Secondary -> Perform:
+执行模块，比较复杂，所以独立成了一个小模块
+
+DelegateIMP:
+代理

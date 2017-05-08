@@ -31,22 +31,45 @@
     switch (startAction) {
         case kResourceUploadActionTakePicture:
         {
-            [self takePictureByCameraWithComplete:^(UIImage *image) {
-                self.localPictureImage = image;
-                self.currentActionStatusSuccess = (nil != image);
-                if (self.currentActionStatusSuccess) {
-                    self.currentActionStatusMessage = nil;
-                }else {
-                    self.currentActionStatusMessage = @"缓存失败";
-                }
-                self.actionDidCompletedCallBack(self);
-                [self startUploadWorkStep:kResourceUploadActionCacheToLocal ifAllow:self.currentActionStatusSuccess];
-            }];
+//            NSLog(@"执行到了这里");
+            if (self.isZM) {
+                [self takePictureWithComplete:^(UIImage *image) {
+                    self.localPictureImage = image;
+                    self.currentActionStatusSuccess = (nil != image);
+                    if (self.currentActionStatusSuccess) { // 获取拍照图片成功
+                        self.currentActionStatusMessage = nil;
+                    }
+                    else {
+                        self.currentActionStatusMessage = @"缓存失败";
+                    }
+                    
+                    self.actionDidCompletedCallBack(self);
+                    [self startUploadWorkStep:kResourceUploadActionCacheToLocal ifAllow:self.currentActionStatusSuccess];
+                }];
+            }
+            else {
+                // 拍照
+                [self takePictureByCameraWithComplete:^(UIImage *image) {
+                    self.localPictureImage = image;
+                    self.currentActionStatusSuccess = (nil != image);
+                    if (self.currentActionStatusSuccess) { // 获取拍照图片成功
+                        self.currentActionStatusMessage = nil;
+                    }
+                    else {
+                        self.currentActionStatusMessage = @"缓存失败";
+                    }
+                    
+                    self.actionDidCompletedCallBack(self);
+                    [self startUploadWorkStep:kResourceUploadActionCacheToLocal ifAllow:self.currentActionStatusSuccess];
+                }];
+            }
         }
             break;
 
         case kResourceUploadActionCacheToLocal:
         {
+            NSLog(@"执行到了这里");
+            // 缓存到本地
             if (nil != self.localPictureImage) {
                 NSString *fileName = [self generateRandomFileName];
                 self.localPictureFile = [self saveImage:self.localPictureImage toDir:[NSString imageCachePath] fileName:fileName];
@@ -59,6 +82,8 @@
             break;
         case kResourceUploadActionGetToken:
         {
+            NSLog(@"执行到了这里");
+            // 从应用服务器取得上传的Token
             [Util showWaitingDialog];
             [[HttpClientManager sharedInstance]getQiniuUploadTokenWithResponse:^(NSError *error, HttpResponseData *responseData) {
                 [Util dismissWaitingDialog];
@@ -77,6 +102,8 @@
             break;
         case kResourceUploadActionUploadToQiniu:
         {
+            NSLog(@"执行到了这里");
+            // 上传七牛
             QNUploadOption *uploadOption = [[QNUploadOption alloc]initWithMime:nil progressHandler:self.uploadProgressCallBack params:nil checkCrc:NO cancellationSignal:nil];
             
             self.uploadMgr = [[QNUploadManager alloc]init];
@@ -96,21 +123,42 @@
             break;
         case kResourceUploadActionSaveToServer:
         {
-            SaveImageInfosInputParams *input = [[SaveImageInfosInputParams alloc]init];
-            input.imageUrl = self.pictureUrlInQiniu;
-            input.imageName = self.imageName;
-            input.imageType = self.imageType;
-            input.objectId = self.orderId;
-            
-            [[HttpClientManager sharedInstance]saveImageInfos:input response:^(NSError *error, HttpResponseData *responseData) {
-                self.currentActionStatusSuccess = (!error && (kHttpReturnCodeSuccess == responseData.resultCode));
-                if (!self.currentActionStatusSuccess){
-                    self.currentActionStatusMessage = @"保存失败";
-                }else {
-                    self.currentActionStatusMessage = nil;
-                }
-                self.actionDidCompletedCallBack(self);
-            }];
+            // 保存图片到应用服务器
+            if (self.isZM) {
+                self.isZM = NO;
+                // 智米
+                SmartMiRepairerSaveImageUrlInputParams *input = [SmartMiRepairerSaveImageUrlInputParams new];
+                input.imageUrl = self.pictureUrlInQiniu;
+                input.imageType = self.imageType;
+                input.objectId = self.orderId;
+                [[HttpClientManager sharedInstance] smartMi_repairer_saveImageUrl:input response:^(NSError *error, HttpResponseData *responseData) {
+                    self.currentActionStatusSuccess = (!error && (kHttpReturnCodeSuccess == responseData.resultCode));
+                    if (!self.currentActionStatusSuccess){
+                        self.currentActionStatusMessage = @"保存失败";
+                    }else {
+                        self.currentActionStatusMessage = nil;
+                    }
+                    self.actionDidCompletedCallBack(self);
+                }];
+            }
+            else {
+                // 长虹
+                SaveImageInfosInputParams *input = [[SaveImageInfosInputParams alloc]init];
+                input.imageUrl = self.pictureUrlInQiniu;
+                input.imageName = self.imageName;
+                input.imageType = self.imageType;
+                input.objectId = self.orderId;
+                
+                [[HttpClientManager sharedInstance]saveImageInfos:input response:^(NSError *error, HttpResponseData *responseData) {
+                    self.currentActionStatusSuccess = (!error && (kHttpReturnCodeSuccess == responseData.resultCode));
+                    if (!self.currentActionStatusSuccess){
+                        self.currentActionStatusMessage = @"保存失败";
+                    }else {
+                        self.currentActionStatusMessage = nil;
+                    }
+                    self.actionDidCompletedCallBack(self);
+                }];
+            }
         }
             break;
         case kResourceUploadActionNothingToDo:
@@ -136,6 +184,12 @@
 {
     self.pictureMgr = [[SystemPicture alloc]initWithDelegate:self baseViewController:self.baseViewController];
     [self.pictureMgr takePictureByCamera];
+    self.completeTakingBlock = complete;
+}
+
+- (void) takePictureWithComplete:(VoidBlock_id)complete {
+    self.pictureMgr = [[SystemPicture alloc]initWithDelegate:self baseViewController:self.baseViewController];
+    [self.pictureMgr startSelect];
     self.completeTakingBlock = complete;
 }
 

@@ -12,7 +12,7 @@
 #pragma mark - 编译目标
 
 //0 for debug, 1 for release
-#define Build_For_Release  0
+#define Build_For_Release  1
 
 #pragma mark - 功能子模块
 
@@ -32,6 +32,10 @@
 #define kGetuiPushAppId @"8zjRn9TYDm9WCzQAMQbVe8"
 #define kGetuiPushAppKey @"xzBQ71fmxq7Nyya9cElbZ8"
 #define kGetuiPushAppSecret @"xvaLuO1tQP7PXYXN0P0k19"
+
+//#define kGetuiPushAppId @"rGLk2Jr2JM74YwLZ3kNXY1"
+//#define kGetuiPushAppKey @"460PQcb9oV5HKykHIoFv49"
+//#define kGetuiPushAppSecret @"8Uq9nFdQS18wsQCHU8nOsA"
 #else
 //Debug
 #define kGetuiPushAppId @"rGLk2Jr2JM74YwLZ3kNXY1"
@@ -53,11 +57,17 @@
 //#define kServerBaseUrl      @"http://shgj.kydls.com/"
 //#define kLetvServerBaseUrl  @"http://lsshgj.kydls.com"
 #if (Build_For_Release)
-#define kServerBaseUrl      @"http://shgj.kydls.com/"
-#define kLetvServerBaseUrl  @"http://lsshgj.kydls.com"
+#define kServerBaseUrl      @"http://shgj.kydls.cn/"
+#define kSmartMiServerBaseUrl @"http://test.shgj.kydls.cn:81"
+#define kLetvServerBaseUrl  @"http://lsshgj.kydls.cn"
+
+//#define kLetvServerBaseUrl @"http://test.lsshgj.kydls.com:81"
+//#define kSmartMiServerBaseUrl @"http://test.shgj.kydls.com:81"
+//#define kServerBaseUrl @"http://test.shgj.kydls.com:81"
 #else
 //[test]
 #define kLetvServerBaseUrl @"http://test.lsshgj.kydls.com:81"
+#define kSmartMiServerBaseUrl @"http://test.shgj.kydls.com:81"
 #define kServerBaseUrl @"http://test.shgj.kydls.com:81"
 
 #endif
@@ -123,7 +133,7 @@
 
 #define kTableViewSectionHeaderHeight   (36)
 #define kTableViewLeftPadding   (16)
-#define kTableViewCellDefaultHeight (44.0f)
+#define kTableViewCellDefaultHeight (50.0f)
 #define kTableViewCellLargeHeight (54.0f)
 
 //VC 默认背景色

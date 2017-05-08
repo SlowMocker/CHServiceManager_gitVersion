@@ -17,4 +17,5 @@ typedef void (^ProductModelSelectedBlock)(ViewController *viewController, Produc
 @property(nonatomic, strong)ProductModelSelectedBlock modelSelectedBlock;
 
 - (void)queryMachineModels:(NSString*)keyWords response:(RequestCallBackBlockV2)requestCallBackBlock;
+
 @end

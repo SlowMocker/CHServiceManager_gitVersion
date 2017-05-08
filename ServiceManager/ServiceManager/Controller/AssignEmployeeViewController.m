@@ -7,6 +7,7 @@
 //
 
 #import "AssignEmployeeViewController.h"
+
 #import "EmployeeInfoCell.h"
 #import "AssignEmployeeSearchController.h"
 #import "QuickFuzzySearch.h"
@@ -14,10 +15,7 @@
 static NSString *sEmployeeInfoCellIdentifier = @"sEmployeeInfoCell";
 
 @interface AssignEmployeeViewController ()<WZTableViewDelegate, BMKMapViewDelegate, UISearchDisplayDelegate, UITableViewDataSource>
-{
-    CLLocationCoordinate2D _clientLocateCoordinate;
-    BMKPointAnnotation *_clientAddrAnnotation;
-}
+
 @property(nonatomic, strong)EmployeeInfoCell *protypeCell;
 
 @property(nonatomic, strong)UIButton *searchButton;
@@ -33,6 +31,10 @@ static NSString *sEmployeeInfoCellIdentifier = @"sEmployeeInfoCell";
 @end
 
 @implementation AssignEmployeeViewController
+{
+    CLLocationCoordinate2D _clientLocateCoordinate;
+    BMKPointAnnotation *_clientAddrAnnotation;
+}
 
 - (WZTableView*)tableView
 {
@@ -154,7 +156,41 @@ static NSString *sEmployeeInfoCellIdentifier = @"sEmployeeInfoCell";
     return matchedEmployees;
 }
 
-#pragma mark - tableview delegate
+#pragma mark
+#pragma mark public methods
+- (void) requestRepairerListWithResponse:(RequestCallBackBlockV2)responseBlock {
+    GetRepairerListInputParams *input = [GetRepairerListInputParams new];
+    input.object_id = [self.orderId description];
+    
+    [Util showWaitingDialog];
+    [self.httpClient getRepairerList:input response:^(NSError *error, HttpResponseData *responseData) {
+        [Util dismissWaitingDialog];
+        
+        NSArray *repairers;
+        if (!error && kHttpReturnCodeSuccess == responseData.resultCode) {
+            repairers = [MiscHelper parserObjectList:responseData.resultData objectClass:@"RepairerInfo"];
+        }else {
+            [Util showErrorToastIfError:responseData otherError:error];
+        }
+        responseBlock(error, responseData, repairers);
+    }];
+}
+
+- (void) assignOrderToRepairer:(RepairerInfo*)repairer response:(RequestCallBackBlock)responseBlock {
+    AssignEngineerInputParams *input = [AssignEngineerInputParams new];
+    input.object_id = [self.orderId description];
+    input.repairmanid = repairer.repairman_id;
+    
+    [Util showWaitingDialog];
+    [self.httpClient assignEngineer:input response:^(NSError *error, HttpResponseData *responseData) {
+        [Util dismissWaitingDialog];
+        
+        responseBlock(error, responseData);
+    }];
+}
+
+#pragma mark
+#pragma mark UITableViewDelegate
 
 -(void)tableView:(WZTableView*)tableView requestListDatas:(PageInfo*)pageInfo
 {
@@ -174,24 +210,6 @@ static NSString *sEmployeeInfoCellIdentifier = @"sEmployeeInfoCell";
         self.searchButton.enabled = (self.repairerListArray.count > 0);
         [tableView didRequestTableViewListDatasWithCount:self.repairerListArray.count totalCount:self.repairerListArray.count page:pageInfo response:responseData error:error];
         [self setClientLocationAnnotation:_clientLocateCoordinate];
-    }];
-}
-
-- (void)requestRepairerListWithResponse:(RequestCallBackBlockV2)responseBlock{
-    GetRepairerListInputParams *input = [GetRepairerListInputParams new];
-    input.object_id = [self.orderId description];
-    
-    [Util showWaitingDialog];
-    [self.httpClient getRepairerList:input response:^(NSError *error, HttpResponseData *responseData) {
-        [Util dismissWaitingDialog];
-
-        NSArray *repairers;
-        if (!error && kHttpReturnCodeSuccess == responseData.resultCode) {
-            repairers = [MiscHelper parserObjectList:responseData.resultData objectClass:@"RepairerInfo"];
-        }else {
-            [Util showErrorToastIfError:responseData otherError:error];
-        }
-        responseBlock(error, responseData, repairers);
     }];
 }
 
@@ -280,19 +298,6 @@ static NSString *sEmployeeInfoCellIdentifier = @"sEmployeeInfoCell";
     }];
 }
 
-- (void)assignOrderToRepairer:(RepairerInfo*)repairer response:(RequestCallBackBlock)responseBlock
-{
-    AssignEngineerInputParams *input = [AssignEngineerInputParams new];
-    input.object_id = [self.orderId description];
-    input.repairmanid = repairer.repairman_id;
-
-    [Util showWaitingDialog];
-    [self.httpClient assignEngineer:input response:^(NSError *error, HttpResponseData *responseData) {
-        [Util dismissWaitingDialog];
-
-        responseBlock(error, responseData);
-    }];
-}
 
 - (EmployeeInfoCell*)setCell:(EmployeeInfoCell*)cell withData:(NSIndexPath*)indexPath forTableView:(UITableView*)tableView
 {

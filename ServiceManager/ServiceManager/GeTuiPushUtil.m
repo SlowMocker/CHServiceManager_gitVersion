@@ -37,7 +37,7 @@ static NSString *PushMessageTypeReceivedAccount = @"9"; //延保收款
 {
     UIViewController *topVc = [((AppDelegate*)[[UIApplication sharedApplication]delegate]) topViewController];
 
-    if ([message.type isEqualToString:PushMessageTypeNormalText]) {
+    if (message.type == nil) {
         [Util showAlertView:@"收到通知" message:message.data.description];
     }else if ([message.type isEqualToString:PushMessageTypeWeixinComment]){
         [self postNotification:NotificationNameWeixinComment object:self userInfo:(NSDictionary*)message.data];
@@ -145,7 +145,7 @@ static NSString *PushMessageTypeReceivedAccount = @"9"; //延保收款
 /** APP已经接收到“远程”通知(推送) - (App运行在后台/App运行在前台) */
 - (void)gt_application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     application.applicationIconBadgeNumber = 0; // 标签
-    
+    NSLog(@"--------------[Receive RemoteNotification]: %@",userInfo);
     DLog(@"\n>>>[Receive RemoteNotification]:%@\n\n", userInfo);
 }
 
@@ -197,7 +197,7 @@ static NSString *PushMessageTypeReceivedAccount = @"9"; //延保收款
     DLog(@"\n>>>[GexinSdk error]:%@\n\n", [error localizedDescription]);
 }
 
-/** SDK收到透传消息回调 */
+///** SDK收到透传消息回调 */ // 需要替换接口  这个接口已经废弃
 - (void)GeTuiSdkDidReceivePayload:(NSString *)payloadId andTaskId:(NSString *)taskId andMessageId:(NSString *)aMsgId andOffLine:(BOOL)offLine fromApplication:(NSString *)appId {
     
     NSData *payload = [GeTuiSdk retrivePayloadById:payloadId];
@@ -220,6 +220,31 @@ static NSString *PushMessageTypeReceivedAccount = @"9"; //延保收款
     }
     [GeTuiSdk sendFeedbackMessage:90001 taskId:taskId msgId:aMsgId];
 }
+// 替换上面的接口(目前还是调用的上面的接口)
+//- (void)GeTuiSdkDidReceivePayloadData:(NSData *)payloadData andTaskId:(NSString *)taskId andMsgId:(NSString *)msgId andOffLine:(BOOL)offLine fromGtAppId:(NSString *)appId {
+//    NSData *payload = payloadData;
+//    NSString *payloadMsg = nil;
+//    if (payload) {
+//        payloadMsg = [[NSString alloc] initWithBytes:payload.bytes length:payload.length encoding:NSUTF8StringEncoding];
+//        PushMessageContent *message = [[PushMessageContent alloc]init];
+//        NSDictionary *messageDic = [NSDictionary dictionaryWithJsonString:payloadMsg];
+//        if (messageDic) {
+//            message.type = [messageDic objForKey:@"type"];
+//            message.data = [messageDic objForKey:@"data"];
+//            message.message = [messageDic objForKey:@"message"];
+//        }else {
+//            message.type =  PushMessageTypeNormalText;
+//            message.data = payloadMsg;
+//        }
+//        if (!offLine) { //线上透传消息
+//            [self handleOnlineTransparentNotification:message];
+//        }
+//    }
+//    [GeTuiSdk sendFeedbackMessage:90001 taskId:taskId msgId:msgId];
+//}
+
+
+
 
 /** SDK收到sendMessage消息回调 */
 - (void)GeTuiSdkDidSendMessage:(NSString *)messageId result:(int)result {

@@ -285,6 +285,17 @@
     return orderArray;
 }
 
++(NSArray*)smartMi_filterOrders:(NSArray*)orders byStatus:(NSInteger)status
+{
+    NSMutableArray *orderArray = [[NSMutableArray alloc]init];
+    for (SmartMiOrderContentModel *order in orders) {
+        if ([order isOrderStatus:status]) {
+            [orderArray addObject:order];
+        }
+    }
+    return orderArray;
+}
+
 + (NSMutableArray*)parserExtendOrderList:(id)resultData;
 {
     ReturnIf((!resultData) || (![resultData isKindOfClass:[NSArray class]])) nil;
@@ -316,6 +327,7 @@
     details.supportInfo.workerName = details.partner_fwgname;
     return details;
 }
+
 
 + (NSArray*)parserExtendProductContentList:(NSArray*)resultData{
     ReturnIf((!resultData) || (![resultData isKindOfClass:[NSArray class]])) nil;
@@ -833,9 +845,9 @@
 {
     NSMutableArray *matchGroups = [NSMutableArray new];
 
-    BOOL receiveStr0 = [isReceive isEqualToString:@"0"];
-    BOOL receiveStr1 = [isReceive isEqualToString:@"1"];
-    BOOL receiveStr2 = [isReceive isEqualToString:@"2"];
+    BOOL receiveStr0 = [isReceive isEqualToString:@"0"]; // 未处理
+    BOOL receiveStr1 = [isReceive isEqualToString:@"1"]; // 接受
+    BOOL receiveStr2 = [isReceive isEqualToString:@"2"]; // 拒绝
     BOOL amIWorker = [workerId isEqualToString:[UserInfoEntity sharedInstance].userId];
 
     NSInteger orderStatus = NSNotFound;

@@ -57,6 +57,8 @@
 //当为维修工时，则为kRepairerOrderStatus类型
 +(NSArray*)letv_filterOrders:(NSArray*)orders byStatus:(NSInteger)status;
 
++(NSArray*)smartMi_filterOrders:(NSArray*)orders byStatus:(NSInteger)status;
+
 //orders: OrderContentModel array ,
 //status: 当为服务商时，则为kFacilitatorOrderStatus类型
 //当为维修工时，则为kRepairerOrderStatus类型
@@ -187,4 +189,6 @@
 
 //pop到最近上层的工单列表、或历史工单列表、或延保列表
 + (void)popToLatestListViewController:(UIViewController*)fromVc;
+
+
 @end

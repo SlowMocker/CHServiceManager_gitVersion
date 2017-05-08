@@ -88,6 +88,7 @@ static AFNetworkReachabilityStatus _netStatus = AFNetworkReachabilityStatusUnkno
         }
         relativePath = [NSString stringWithFormat:@"%@%@", relativePath, paramsStr];
     }
+
     [manager GET:relativePath parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         DLog(@"[Get %@ Success]:%@", relativePath, responseObject);
         HttpResponseData *response = [[self class] parserResponseData:responseObject];
@@ -333,6 +334,7 @@ static AFNetworkReachabilityStatus _netStatus = AFNetworkReachabilityStatusUnkno
 -(AFHTTPSessionManager*)makeSessionManager:(NSDictionary*)moreHeaders
 {
     NSURL *baseUrl = [NSURL URLWithString:sServerBaseUrl];
+    NSLog(@"\n\n\n**** : %@\n\n\n\n",baseUrl);
     NSURLSessionConfiguration *config = [self configSessionConfiguration:moreHeaders];
 
     AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc]initWithBaseURL:baseUrl sessionConfiguration:config];

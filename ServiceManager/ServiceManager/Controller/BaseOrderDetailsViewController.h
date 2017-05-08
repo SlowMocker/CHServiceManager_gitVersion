@@ -6,13 +6,17 @@
 //  Copyright © 2016年 wangzhi. All rights reserved.
 //
 
+// 1. 子类化
+// 2. 设置 detailDataSource 数据源
+// 3.
+
 #import "ViewController.h"
 #import "LeftTextRightTextCell.h"
 #import "WZTableView.h"
 
 /**
  *  工单详情基类
- *  用法: 1子类化，2设置detalsDataModel数据源，3根据需要重写公开的方法
+ *  用法: 1子类化，2设置 detalsDataModel 数据源，3根据需要重写公开的方法
  */
 
 //指定行的TAG
@@ -31,11 +35,12 @@ enum {
 @end
 
 @interface BaseOrderDetailsViewController : ViewController
+
 @property(nonatomic, strong)WZTableView *tableView;
-@property(nonatomic, strong)UIButton *urgeButton;
+@property(nonatomic, strong)UIButton *urgeButton;/**< 催单按钮 */
 
 //数据源，需要设置
-@property(nonatomic, strong)TableViewDataSourceModel *detalsDataModel;
+@property(nonatomic, strong)TableViewDataHandle *detalsDataModel;
 
 //催单按钮被点击
 -(void)urgeButtonClicked:(UIButton*)sender;

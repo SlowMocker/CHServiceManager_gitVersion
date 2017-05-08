@@ -10,9 +10,12 @@
 #import "OrderTableViewCell.h"
 
 @interface OrderTableViewCellDataSetter : NSObject
+
 +(void)setOrderContentModel:(OrderContentModel*)order toCell:(OrderTableViewCell*)cell;
 
 +(void)setLetvOrderContentModel:(LetvOrderContentModel*)order toCell:(OrderTableViewCell*)cell;
+
++(void)setSmartMiOrderContentModel:(SmartMiOrderContentModel*)order toCell:(OrderTableViewCell*)cell;
 
 + (NSAttributedString*)buildOrderAttrStr:(NSString*)processType catgory:(NSString*)category customer:(NSString*)customerName;
 @end

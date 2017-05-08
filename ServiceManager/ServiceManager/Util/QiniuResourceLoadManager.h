@@ -11,6 +11,8 @@
 
 @interface QiniuResourceLoadManager : NSObject
 
+@property (nonatomic , assign) BOOL isZM;/**< 是否是智米 */
+
 @property(nonatomic, copy)NSString *orderId;
 @property(nonatomic, copy)NSString *imageType;//（1：设备；2：发票）
 @property(nonatomic, copy)NSString *imageName;//照片名称（devicePicture1：设备照片1；devicePicture2：设备照片2；invoicePicture1：发票照片1）

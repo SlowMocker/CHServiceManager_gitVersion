@@ -9,7 +9,7 @@
 #import "ViewController.h"
 
 @interface SearchOrderViewController : ViewController
-@property(nonatomic, copy)NSString *searchKeyWord;
-@property(nonatomic, assign)kServiceBrandGroup serviceBrandGroup;
-@property(nonatomic, assign)kSearchOrderGroupType searchOrderGroupType;
+//@property(nonatomic, copy)NSString *searchKeyWord;
+@property(nonatomic, assign)kServiceBrandGroup serviceBrandGroup;/**< 搜索品牌 */
+@property(nonatomic, assign)kSearchOrderGroupType searchOrderGroupType;/**< 搜索工单类型: 所有、已结、未结 */
 @end
